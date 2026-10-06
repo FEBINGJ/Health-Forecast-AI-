@@ -145,7 +145,7 @@ export default function PatientDetail() {
               <span className="px-1 text-slate-400">Attending: {patient.attending}</span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap lg:shrink-0 lg:justify-end">
+          <div className="flex flex-wrap gap-2 sm:shrink-0">
             <Button
               variant={live ? 'success' : 'secondary'}
               icon={live ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}

@@ -60,7 +60,7 @@ function PreviewCard({ preview }: { preview: Prediction | null }) {
   const { state } = useApp();
   return (
     <Card className="overflow-hidden">
-      <div className="flex items-center gap-2.5 border-b border-slate-100 bg-gradient-to-r from-blue-50 to-white px-4 py-3.5">
+      <div className="flex items-center gap-2.5 border-b border-slate-100 bg-linear-to-r from-blue-50 to-white px-4 py-3.5">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-600 text-white">
           <BrainCircuit className="h-4 w-4" />
         </span>
@@ -287,7 +287,7 @@ export default function AddPatient() {
         }
       />
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_340px]">
         <Card className="min-w-0">
           <div className="border-b border-slate-100 px-4 py-5 sm:px-8">
             <div className="mx-auto max-w-xl">
@@ -535,7 +535,7 @@ export default function AddPatient() {
                     </div>
                   )}
                 </Section>
-                <div className="xl:hidden">
+                <div className="lg:hidden">
                   <PreviewCard preview={preview} />
                 </div>
               </div>
@@ -564,7 +564,7 @@ export default function AddPatient() {
           </div>
         </Card>
 
-        <aside className={cn('space-y-4', step === 0 && 'hidden xl:block', step === 2 && 'hidden xl:block')}>
+        <aside className={cn('space-y-4', step === 0 && 'hidden lg:block', step === 2 && 'hidden lg:block')}>
           <PreviewCard preview={preview} />
           <Card className="p-4">
             <p className="text-sm font-semibold text-slate-900">What happens next?</p>

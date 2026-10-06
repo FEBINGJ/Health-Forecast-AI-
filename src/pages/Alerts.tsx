@@ -158,7 +158,7 @@ export default function Alerts() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex shrink-0 gap-2 pl-13 sm:pl-0">
+                  <div className="flex shrink-0 gap-2 pl-[52px] sm:pl-0">
                     <Button size="sm" variant="secondary" onClick={() => navigate(`/patients/${a.patientId}?tab=vitals`, { state: { from: '/alerts' } })}>
                       View patient
                     </Button>

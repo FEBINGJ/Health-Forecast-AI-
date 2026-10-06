@@ -83,3 +83,20 @@
 .recharts-wrapper *:focus {
   outline: none;
 }
+
+/* Responsive table wrapper */
+@utility table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  /* Speed up tap response on touch devices */
+  button, [role="button"], a, input, select, textarea {
+    touch-action: manipulation;
+  }
+}
+

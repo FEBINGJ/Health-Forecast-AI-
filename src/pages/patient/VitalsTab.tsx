@@ -25,12 +25,20 @@ export default function VitalsTab({ patient, onRecord }: { patient: Patient; onR
   return (
     <div className="space-y-4 sm:space-y-5">
       <Card className="min-w-0">
-        <CardHeader
-          title="Vital Signs Trend"
-          subtitle={`${patient.vitals.length} observations recorded`}
-          icon={<Activity className="h-4 w-4" />}
-          action={<Segmented items={RANGES} value={hours} onChange={setHours} />}
-        />
+        <div className="flex flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-start sm:justify-between sm:px-5 sm:pt-5">
+          <div className="flex min-w-0 items-start gap-2.5">
+            <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-600">
+              <Activity className="h-4 w-4" />
+            </span>
+            <div className="min-w-0">
+              <h3 className="text-[15px] font-semibold text-slate-900">Vital Signs Trend</h3>
+              <p className="mt-0.5 text-xs text-slate-500">{patient.vitals.length} observations recorded</p>
+            </div>
+          </div>
+          <div className="shrink-0">
+            <Segmented items={RANGES} value={hours} onChange={setHours} />
+          </div>
+        </div>
         <div className="px-4 pt-3 sm:px-5">
           <SeriesToggle visible={visible} onToggle={(k) => setVisible((v) => ({ ...v, [k]: !v[k] }))} />
         </div>

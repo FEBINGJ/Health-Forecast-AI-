@@ -37,9 +37,13 @@ function HeaderSearch() {
   const navigate = useNavigate();
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const mobileRef = useRef<HTMLDivElement>(null);
   const close = useCallback(() => setOpen(false), []);
+  const mobileClose = useCallback(() => { setMobileOpen(false); setQ(''); }, []);
   useClickOutside(ref, close, open);
+  useClickOutside(mobileRef, mobileClose, mobileOpen);
 
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -49,49 +53,103 @@ function HeaderSearch() {
 
   const go = (id: string) => {
     setOpen(false);
+    setMobileOpen(false);
     setQ('');
     navigate(`/patients/${id}`);
   };
 
   return (
-    <div ref={ref} className="relative hidden lg:block">
-      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-      <input
-        value={q}
-        onChange={(e) => {
-          setQ(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && results[0]) go(results[0].id);
-          if (e.key === 'Escape') setOpen(false);
-        }}
-        placeholder="Search patient name or ID…"
-        aria-label="Search patients"
-        className="h-9 w-64 rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/15 xl:w-80"
-      />
-      {open && q.trim() && (
-        <div className="absolute right-0 top-11 w-full animate-pop-in overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
-          {results.length ? (
-            results.map((p) => {
-              const pr = predictions.get(p.id);
-              return (
-                <button key={p.id} onClick={() => go(p.id)} className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-slate-50">
-                  <span className="font-mono text-xs text-slate-500">{p.id}</span>
-                  <span className="flex-1 truncate text-sm font-medium text-slate-800">{p.name}</span>
-                  {pr && <RiskBadge level={pr.deterioration.level} size="sm" />}
-                </button>
-              );
-            })
-          ) : (
-            <p className="px-3 py-3 text-sm text-slate-500">No patients match “{q}”.</p>
-          )}
-        </div>
-      )}
-    </div>
+    <>
+      {/* Desktop search */}
+      <div ref={ref} className="relative hidden lg:block">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && results[0]) go(results[0].id);
+            if (e.key === 'Escape') setOpen(false);
+          }}
+          placeholder="Search patient name or ID…"
+          aria-label="Search patients"
+          className="h-9 w-64 rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/15 xl:w-80"
+        />
+        {open && q.trim() && (
+          <div className="absolute right-0 top-11 w-full animate-pop-in overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+            {results.length ? (
+              results.map((p) => {
+                const pr = predictions.get(p.id);
+                return (
+                  <button key={p.id} onClick={() => go(p.id)} className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-slate-50">
+                    <span className="font-mono text-xs text-slate-500">{p.id}</span>
+                    <span className="flex-1 truncate text-sm font-medium text-slate-800">{p.name}</span>
+                    {pr && <RiskBadge level={pr.deterioration.level} size="sm" />}
+                  </button>
+                );
+              })
+            ) : (
+              <p className="px-3 py-3 text-sm text-slate-500">No patients match "{q}".</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Mobile search toggle */}
+      <div ref={mobileRef} className="relative lg:hidden">
+        <button
+          onClick={() => setMobileOpen((o) => !o)}
+          className="grid h-10 w-10 place-items-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+          aria-label="Search patients"
+          aria-expanded={mobileOpen}
+        >
+          <Search className="h-5 w-5" />
+        </button>
+        {mobileOpen && (
+          <div className="fixed inset-x-3 top-16 z-50 animate-pop-in overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl">
+            <div className="flex items-center gap-2 border-b border-slate-100 px-3 py-2.5">
+              <Search className="h-4 w-4 shrink-0 text-slate-400" />
+              <input
+                autoFocus
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && results[0]) go(results[0].id);
+                  if (e.key === 'Escape') mobileClose();
+                }}
+                placeholder="Search patient name or ID…"
+                aria-label="Search patients"
+                className="flex-1 bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              />
+            </div>
+            <div className="max-h-64 overflow-y-auto">
+              {results.length ? (
+                results.map((p) => {
+                  const pr = predictions.get(p.id);
+                  return (
+                    <button key={p.id} onClick={() => go(p.id)} className="flex w-full items-center gap-3 px-3 py-3 text-left hover:bg-slate-50">
+                      <span className="font-mono text-xs text-slate-500">{p.id}</span>
+                      <span className="flex-1 truncate text-sm font-medium text-slate-800">{p.name}</span>
+                      {pr && <RiskBadge level={pr.deterioration.level} size="sm" />}
+                    </button>
+                  );
+                })
+              ) : q.trim() ? (
+                <p className="px-3 py-3 text-sm text-slate-500">No patients match "{q}".</p>
+              ) : (
+                <p className="px-3 py-3 text-sm text-slate-400">Start typing to search…</p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
+
 
 function AlertsMenu() {
   const { state, dispatch } = useApp();
@@ -313,7 +371,7 @@ function Sidebar({ alertCount }: { alertCount: number }) {
         ))}
       </nav>
       <div className="hidden p-3 lg:block">
-        <div className="rounded-xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-3.5">
+        <div className="rounded-xl border border-slate-200 bg-linear-to-br from-blue-50 to-white p-3.5">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-800">
             <BrainCircuit className="h-4 w-4 text-blue-600" /> AI Risk Engine
           </div>
@@ -418,7 +476,7 @@ export default function Layout() {
       <Header />
       <div className="flex">
         <Sidebar alertCount={stats.activeAlerts} />
-        <main className="min-w-0 flex-1 px-3 pb-28 pt-4 sm:px-5 sm:pt-6 md:pb-10 lg:px-8">
+        <main className="min-w-0 flex-1 px-3 pb-[calc(5rem+env(safe-area-inset-bottom))] pt-4 sm:px-5 sm:pt-6 md:pb-10 lg:px-8">
           <div className="mx-auto max-w-[1400px]">
             <Outlet />
           </div>

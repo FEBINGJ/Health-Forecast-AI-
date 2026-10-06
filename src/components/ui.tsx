@@ -127,12 +127,12 @@ export function CardHeader({
 
 export function PageHeader({ title, subtitle, actions, className }: { title: ReactNode; subtitle?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <div className={cn('mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-end sm:justify-between', className)}>
+    <div className={cn('mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-start sm:justify-between', className)}>
       <div className="min-w-0">
         <h1 className="text-xl font-bold tracking-tight text-navy-900 sm:text-2xl">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-slate-500">{subtitle}</p>}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
     </div>
   );
 }
@@ -236,7 +236,7 @@ export function Select({ invalid, className, children, ...rest }: SelectHTMLAttr
 }
 
 export function Textarea({ invalid, className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement> & { invalid?: boolean }) {
-  return <textarea className={cn(inputBase, 'min-h-[96px] px-3 py-2.5', invalid ? badRing : okRing, className)} {...rest} />;
+  return <textarea className={cn(inputBase, 'min-h-24 px-3 py-2.5', invalid ? badRing : okRing, className)} {...rest} />;
 }
 
 export function Switch({
@@ -469,7 +469,7 @@ export function Modal({
   if (!open) return null;
   const w = size === 'sm' ? 'sm:max-w-md' : size === 'lg' ? 'sm:max-w-3xl' : 'sm:max-w-xl';
   return createPortal(
-    <div className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:p-4">
+    <div className="fixed inset-0 z-70 flex items-end justify-center sm:items-center sm:p-4">
       <div className="absolute inset-0 animate-fade-in bg-slate-900/45 backdrop-blur-[2px]" onClick={onClose} />
       <div
         role="dialog"
@@ -538,7 +538,7 @@ export function Gauge({ percent, level, thresholds, label }: { percent: number; 
     );
   };
   return (
-    <svg viewBox="0 0 200 118" className="w-full max-w-[240px]" role="img" aria-label={`${percent}% ${level} risk`}>
+    <svg viewBox="0 0 200 118" className="w-full max-w-60" role="img" aria-label={`${percent}% ${level} risk`}>
       <path d={arc} fill="none" stroke="#eef2f7" strokeWidth={sw} strokeLinecap="round" />
       <path
         d={arc}
