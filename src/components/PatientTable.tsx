@@ -293,12 +293,12 @@ export function PatientTable({
                     {full ? ` · ${p.diagnosis}` : ''}
                   </p>
                   <div className="mt-2.5 grid grid-cols-2 gap-2">
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Deterioration</p>
+                    <div className="min-w-0 space-y-1">
+                      <p className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-400">Deterioration</p>
                       {r.prediction ? <RiskBadge level={r.prediction.deterioration.level} percent={r.prediction.deterioration.percent} size="sm" /> : '—'}
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Readmission</p>
+                    <div className="min-w-0 space-y-1">
+                      <p className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-400">Readmission</p>
                       {r.prediction ? <RiskBadge level={r.prediction.readmission.level} percent={r.prediction.readmission.percent} size="sm" /> : '—'}
                     </div>
                   </div>

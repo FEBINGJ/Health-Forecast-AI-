@@ -173,16 +173,16 @@ export default function Dashboard() {
           <Link
             key={c.label}
             to={c.to}
-            className="group rounded-xl border border-slate-200/90 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md sm:p-5"
+            className="group min-w-0 rounded-xl border border-slate-200/90 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md sm:p-5"
           >
             <div className="flex items-start justify-between gap-2">
-              <p className="text-xs font-medium text-slate-500 sm:text-sm">{c.label}</p>
+              <p className="truncate text-xs font-medium text-slate-500 sm:text-sm">{c.label}</p>
               <span className={cn('hidden h-8 w-8 place-items-center rounded-lg sm:grid', c.iconBg)}>
                 <c.icon className="h-4 w-4" />
               </span>
             </div>
-            <p className={cn('mt-1 text-3xl font-bold tracking-tight sm:text-[34px]', c.color)}>{c.value}</p>
-            <p className="mt-0.5 text-[11px] text-slate-400 sm:text-xs">{c.hint}</p>
+            <p className={cn('mt-1 truncate text-3xl font-bold tracking-tight sm:text-[34px]', c.color)}>{c.value}</p>
+            <p className="mt-0.5 truncate text-[11px] text-slate-400 sm:text-xs">{c.hint}</p>
           </Link>
         ))}
       </div>
